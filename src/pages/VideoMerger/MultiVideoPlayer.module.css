@@ -1,0 +1,21 @@
+.videoContainer {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.videoItem {
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+
+.video {
+  width: 300px;
+  height: auto;
+}
+
+.videoTitle {
+  margin-top: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
