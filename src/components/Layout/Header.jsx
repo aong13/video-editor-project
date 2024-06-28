@@ -15,8 +15,8 @@ const Header = () => {
             <Nav.Link as={Link} to="/edit-video">
               비디오 편집
             </Nav.Link>
-            <Nav.Link as={Link} to="/about">
-              이미지 편집
+            <Nav.Link as={Link} to="/merge-video">
+              비디오 병합
             </Nav.Link>
             <Nav.Link as={Link} to="/contact">
               로그인

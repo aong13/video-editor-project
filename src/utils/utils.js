@@ -1,8 +1,14 @@
 //2기 오아영
 
-export function sliderValueToVideoTime(duration, sliderValue) {
-  return Math.round((duration * sliderValue) / 100);
-}
+export const sliderValueToVideoTime = (duration, value) => {
+  return (duration * value) / 100;
+};
+
+export const formatTime = (time) => {
+  const minutes = Math.floor(time / 60);
+  const seconds = Math.floor(time % 60);
+  return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+};
 
 export const toTimeString = (sec, showMilliSeconds = true) => {
   sec = parseFloat(sec);

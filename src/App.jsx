@@ -3,6 +3,7 @@ import PrivateRoute from "./route/PrivateRoute";
 import VideoEditor from "./pages/VideoEditor/VideoEditor";
 import "./App.css";
 import Home from "./pages/Home";
+import VideoMerger from "./pages/VideoMerger/VideoMerger";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <Route path="/*" element={<PrivateRoute />}>
           <Route path="" element={<Home />} />
           <Route path="edit-video" element={<VideoEditor />} />
+          <Route path="merge-video" element={<VideoMerger />} />
         </Route>
       </Routes>
     </Router>
