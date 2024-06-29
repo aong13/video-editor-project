@@ -3,6 +3,7 @@ import { fetchFile } from "@ffmpeg/ffmpeg";
 import { readFileAsBase64, sliderValueToVideoTime } from "../../utils/utils";
 import out from "../../assets/icons/out.svg";
 import dark_download from "../../assets/icons/dark_download.svg";
+import audio from "../../assets/icons/audio.svg";
 
 function VideoConversionButton({
   videoPlayerState,
@@ -14,20 +15,17 @@ function VideoConversionButton({
   onGifCreated = () => {},
 }) {
   const convertToGif = async () => {
-    // starting the conversion process
     onConversionStart(true);
 
     const inputFileName = "input.mp4";
     const outputFileName = "output.gif";
 
-    // writing the video file to memory
     ffmpeg.FS("writeFile", inputFileName, await fetchFile(videoFile));
 
     const [min, max] = sliderValues;
     const minTime = sliderValueToVideoTime(videoPlayerState.duration, min);
     const maxTime = sliderValueToVideoTime(videoPlayerState.duration, max);
 
-    // cutting the video and converting it to GIF with a FFMpeg command
     await ffmpeg.run(
       "-i",
       inputFileName,
@@ -40,10 +38,8 @@ function VideoConversionButton({
       outputFileName
     );
 
-    // reading the resulting file
     const data = ffmpeg.FS("readFile", outputFileName);
 
-    // converting the GIF file created by FFmpeg to a valid image URL
     const gifUrl = URL.createObjectURL(
       new Blob([data.buffer], { type: "image/gif" })
     );
@@ -52,8 +48,6 @@ function VideoConversionButton({
     link.href = gifUrl;
     link.setAttribute("download", "");
     link.click();
-
-    // ending the conversion process
 
     onConversionEnd(false);
   };
@@ -91,6 +85,46 @@ function VideoConversionButton({
     onConversionEnd(false);
   };
 
+  const convertToAudio = async () => {
+    onConversionStart(true);
+
+    const inputFileName = "input.mp4";
+    const outputFileName = "output.mp3";
+
+    ffmpeg.FS("writeFile", inputFileName, await fetchFile(videoFile));
+
+    const [min, max] = sliderValues;
+    const minTime = sliderValueToVideoTime(videoPlayerState.duration, min);
+    const maxTime = sliderValueToVideoTime(videoPlayerState.duration, max);
+
+    await ffmpeg.run(
+      "-i",
+      inputFileName,
+      "-ss",
+      `${minTime}`,
+      "-to",
+      `${maxTime}`,
+      "-q:a",
+      "0",
+      "-map",
+      "a",
+      outputFileName
+    );
+
+    const data = ffmpeg.FS("readFile", outputFileName);
+
+    const audioUrl = URL.createObjectURL(
+      new Blob([data.buffer], { type: "audio/mpeg" })
+    );
+
+    const link = document.createElement("a");
+    link.href = audioUrl;
+    link.setAttribute("download", "");
+    link.click();
+
+    onConversionEnd(false);
+  };
+
   return (
     <>
       <Button
@@ -108,6 +142,13 @@ function VideoConversionButton({
         <img src={dark_download} alt="비디오 저장하기" />
         <p style={{ color: "#383838", fontSize: 16, fontWeight: 700 }}>
           비디오 저장하기
+        </p>
+      </Button>
+
+      <Button onClick={() => convertToAudio()} className="gif__out__btn">
+        <img src={audio} alt="오디오로 변환하기" />
+        <p style={{ color: "#383838", fontSize: 16, fontWeight: 700 }}>
+          오디오로 변환하기
         </p>
       </Button>
     </>
