@@ -15,19 +15,20 @@ const MultiVideoPlayer = ({ videos, handleRemove, uploadFile }) => {
   return (
     <div className={styles.videoContainer}>
       {videos.map((video, index) => (
-        <div key={index} className={styles.videoItem}>
-          <video
-            src={URL.createObjectURL(video)}
-            controls
-            className={styles.video}
-          />
-          <p className={styles.videoTitle}>{truncateTitle(video.name)}</p>
-          <Button
+        <div>
+          <div
+            key={index}
+            className={styles.videoItem}
             onClick={() => handleRemove(index)}
-            className={styles.deleteBtn}
           >
-            삭제
-          </Button>
+            <video
+              src={URL.createObjectURL(video)}
+              controls
+              className={styles.video}
+            />
+            <div className={styles.overlay}>삭제</div>
+          </div>
+          <p className={styles.videoTitle}>{truncateTitle(video.name)}</p>
         </div>
       ))}
       <Button
