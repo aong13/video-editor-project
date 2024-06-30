@@ -8,10 +8,11 @@ import VideoPlayer from "./VideoPlayer";
 import MultiRangeSlider from "../../components/VideoEditor/MultiRangeSlider";
 import VideoConversionButton from "../../components/VideoEditor/VideoConversionButton";
 import { sliderValueToVideoTime } from "../../utils/utils";
+import ProcessingModal from "../../components/VideoEditor/ProcessingModal";
 
 const ffmpeg = createFFmpeg({ log: true });
 
-function VideoEditor() {
+const VideoEditor = () => {
   const [ffmpegLoaded, setFFmpegLoaded] = useState(false);
   const [videoFile, setVideoFile] = useState();
   const [videoPlayerState, setVideoPlayerState] = useState();
@@ -198,33 +199,9 @@ function VideoEditor() {
         </Toast>
       </ToastContainer>
 
-      {/* 변환 처리 중 모달 */}
-      <Modal
-        show={processing}
-        onHide={() => setProcessing(false)}
-        backdrop={false}
-        keyboard={false}
-        centered
-        size="sm"
-      >
-        <div style={{ textAlign: "center" }}>
-          <Spinner animation="border" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </Spinner>
-          <p
-            style={{
-              marginTop: 16,
-              fontSize: 14,
-              fontWeight: 600,
-              color: "#c8c8c8",
-            }}
-          >
-            내보내기가 진행중입니다.
-          </p>
-        </div>
-      </Modal>
+      <ProcessingModal processing={processing} setProcessing={setProcessing} />
     </article>
   );
-}
+};
 
 export default VideoEditor;
