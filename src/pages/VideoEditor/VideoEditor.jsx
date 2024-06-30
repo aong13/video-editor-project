@@ -18,11 +18,11 @@ function VideoEditor() {
   const [videoPlayer, setVideoPlayer] = useState();
   const [sliderValues, setSliderValues] = useState([0, 100]);
   const [processing, setProcessing] = useState(false);
-  const [show, setShow] = useState(false);
+  const [showToast, setShowToast] = useState(false);
   const uploadFile = useRef("");
 
   useEffect(() => {
-    // loading ffmpeg on startup
+    // 컴포넌트 마운트 시 FFmpeg 로드
     ffmpeg.load().then(() => {
       setFFmpegLoaded(true);
     });
@@ -30,17 +30,14 @@ function VideoEditor() {
 
   useEffect(() => {
     const min = sliderValues[0];
-    // when the slider values are updated, updating the
-    // video time
     if (min !== undefined && videoPlayerState && videoPlayer) {
+      // 선택된 슬라이더 값으로 비디오 시간 업데이트
       videoPlayer.seek(sliderValueToVideoTime(videoPlayerState.duration, min));
     }
   }, [sliderValues]);
 
   useEffect(() => {
     if (videoPlayer && videoPlayerState) {
-      // allowing users to watch only the portion of
-      // the video selected by the slider
       const [min, max] = sliderValues;
 
       const minTime = sliderValueToVideoTime(videoPlayerState.duration, min);
@@ -50,15 +47,13 @@ function VideoEditor() {
         videoPlayer.seek(minTime);
       }
       if (videoPlayerState.currentTime > maxTime) {
-        // looping logic
         videoPlayer.seek(minTime);
       }
     }
   }, [videoPlayerState]);
 
   useEffect(() => {
-    // when the current videoFile is removed,
-    // restoring the default state
+    // 선택된 비디오 파일이 없을 경우 초기화
     if (!videoFile) {
       setVideoPlayerState(undefined);
       setVideoPlayer(undefined);
@@ -78,6 +73,7 @@ function VideoEditor() {
       >
         <h1 className={styles.title}>Video Edit</h1>
 
+        {/* 비디오 파일 O => 파일 재선택 버튼 */}
         {videoFile && (
           <div>
             <input
@@ -99,21 +95,24 @@ function VideoEditor() {
       </div>
 
       <section>
+        {/* 비디오 파일 O => video player 표시 */}
         {videoFile ? (
           <VideoPlayer
             src={videoFile}
             onPlayerChange={(videoPlayer) => {
-              setVideoPlayer(videoPlayer);
+              setVideoPlayer(videoPlayer); // 비디오 플레이어 인스턴스 설정
             }}
             onChange={(videoPlayerState) => {
-              setVideoPlayerState(videoPlayerState);
+              setVideoPlayerState(videoPlayerState); // 비디오 플레이어 상태 설정
             }}
           />
         ) : (
           <>
+            {/* 비디오 파일 X => video placeholder 표시 */}
             <div className={styles.video__placeholder}>
               <img src={video_placeholder} alt="비디오를 업로드해주세요." />
             </div>
+            {/* 비디오 업로드 버튼 */}
             <div
               style={{
                 display: "flex",
@@ -139,6 +138,7 @@ function VideoEditor() {
         )}
       </section>
 
+      {/*편집 영역  */}
       {videoFile && (
         <>
           <section
@@ -163,11 +163,11 @@ function VideoEditor() {
           <section>
             <VideoConversionButton
               onConversionStart={() => {
-                setProcessing(true);
+                setProcessing(true); // 변환 시작 시 처리 중 상태 설정
               }}
               onConversionEnd={() => {
-                setProcessing(false);
-                setShow(true);
+                setProcessing(false); // 변환 완료 시 처리 중 상태 해제
+                setShowToast(true);
               }}
               ffmpeg={ffmpeg}
               videoPlayerState={videoPlayerState}
@@ -178,14 +178,15 @@ function VideoEditor() {
         </>
       )}
 
+      {/* 토스트 메시지 */}
       <ToastContainer
         className="p-3"
         position={"top-center"}
         style={{ zIndex: 1 }}
       >
         <Toast
-          onClose={() => setShow(false)}
-          show={show}
+          onClose={() => setShowToast(false)}
+          show={showToast}
           delay={2000}
           bg="dark"
           autohide
@@ -197,6 +198,7 @@ function VideoEditor() {
         </Toast>
       </ToastContainer>
 
+      {/* 변환 처리 중 모달 */}
       <Modal
         show={processing}
         onHide={() => setProcessing(false)}
@@ -209,7 +211,6 @@ function VideoEditor() {
           <Spinner animation="border" role="status">
             <span className="visually-hidden">Loading...</span>
           </Spinner>
-
           <p
             style={{
               marginTop: 16,
