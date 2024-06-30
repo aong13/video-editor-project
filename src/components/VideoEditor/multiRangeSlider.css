@@ -25,17 +25,17 @@
   z-index: 1; 
 }
 
-/* 선택된 범위 슬라이더*/
+/* 선택된 범위 슬라이더 */
 .slider__range {
   background-color: #2cadf9;
   z-index: 2;
 }
 
 .slider__left-value,
-.slider__right-value{
+.slider__right-value {
   color: #2cadf9;
   font-size: 12px;
-  margin-top: 15px; /*트랙 아래에 표시*/
+  margin-top: 15px; /* 트랙 아래에 표시 */
 }
 
 .slider__total-duration {
@@ -46,9 +46,8 @@
 }
 
 .slider__left-value {
-  white-space: nowrap; /*글자가 잘리지 않도록*/
+  white-space: nowrap; /* 글자가 잘리지 않도록 */
 }
-
 
 .slider__right-value {
   transform: translateX(-100%);
@@ -62,7 +61,7 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-  /* 슬라이더 */
+/* 슬라이더 */
 .thumb {
   pointer-events: none;
   position: absolute;
