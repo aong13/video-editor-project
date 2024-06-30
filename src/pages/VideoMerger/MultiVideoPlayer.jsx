@@ -1,7 +1,6 @@
 import React from "react";
-import { Button } from "react-bootstrap";
 import styles from "./MultiVideoPlayer.module.css";
-
+import plus_icon from "../../assets/icons/plus.svg";
 const MAX_TITLE_LENGTH = 30; // max 이상 생략
 
 const MultiVideoPlayer = ({ videos, handleRemove, uploadFile }) => {
@@ -31,12 +30,13 @@ const MultiVideoPlayer = ({ videos, handleRemove, uploadFile }) => {
           <p className={styles.videoTitle}>{truncateTitle(video.name)}</p>
         </div>
       ))}
-      <Button
-        className={styles.uploadBtn}
+      <button
+        className={styles.addButton}
         onClick={() => uploadFile.current.click()}
       >
-        비디오 추가하기
-      </Button>
+        <img src={plus_icon} alt="비디오 추가하기" />
+        <p>비디오 추가</p>
+      </button>
     </div>
   );
 };

@@ -101,15 +101,16 @@ function VideoMerger() {
             handleRemove={handleVideoRemove}
             uploadFile={uploadFile}
           />
-
-          <Button
-            variant="primary"
-            disabled={processing}
-            onClick={mergeVideos}
-            className={styles.mergeBtn}
-          >
-            {processing ? "병합 중..." : "비디오 병합 및 다운로드"}
-          </Button>
+          <div style={{ marginTop: 20 }}>
+            <Button
+              variant="primary"
+              disabled={processing}
+              onClick={mergeVideos}
+              className={styles.upload__btn}
+            >
+              {processing ? "병합 중..." : "비디오 병합 및 다운로드"}
+            </Button>
+          </div>
         </>
       )}
     </article>
