@@ -3,6 +3,7 @@ import { Button } from "react-bootstrap";
 import { createFFmpeg } from "@ffmpeg/ffmpeg";
 import MultiVideoPlayer from "./MultiVideoPlayer";
 import styles from "../VideoEditor.module.css";
+import ProcessingModal from "../../components/VideoEditor/ProcessingModal";
 
 const ffmpeg = createFFmpeg({ log: true });
 
@@ -102,17 +103,26 @@ function VideoMerger() {
             uploadFile={uploadFile}
           />
           <div style={{ marginTop: 20 }}>
-            <Button
-              variant="primary"
-              disabled={processing}
-              onClick={mergeVideos}
-              className={styles.upload__btn}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                margin: "20px 0",
+              }}
             >
-              {processing ? "병합 중..." : "비디오 병합 및 다운로드"}
-            </Button>
+              <Button
+                variant="primary"
+                disabled={processing}
+                onClick={mergeVideos}
+                className={styles.upload__btn}
+              >
+                비디오 병합 및 다운로드
+              </Button>
+            </div>
           </div>
         </>
       )}
+      <ProcessingModal processing={processing} setProcessing={setProcessing} />
     </article>
   );
 }
