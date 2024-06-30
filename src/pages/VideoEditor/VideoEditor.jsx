@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import styles from "../VideoEditor.module.css";
-import { Button, Modal, Spinner, Toast, ToastContainer } from "react-bootstrap";
+import { Button, Toast, ToastContainer } from "react-bootstrap";
 import { createFFmpeg } from "@ffmpeg/ffmpeg";
 
 import video_placeholder from "../../assets/images/video_placeholder.svg";
@@ -23,24 +23,14 @@ const VideoEditor = () => {
   const uploadFile = useRef("");
 
   useEffect(() => {
-    // 컴포넌트 마운트 시 FFmpeg 로드
     ffmpeg.load().then(() => {
       setFFmpegLoaded(true);
     });
   }, []);
 
   useEffect(() => {
-    const min = sliderValues[0];
-    if (min !== undefined && videoPlayerState && videoPlayer) {
-      // 선택된 슬라이더 값으로 비디오 시간 업데이트
-      videoPlayer.seek(sliderValueToVideoTime(videoPlayerState.duration, min));
-    }
-  }, [sliderValues]);
-
-  useEffect(() => {
     if (videoPlayer && videoPlayerState) {
       const [min, max] = sliderValues;
-
       const minTime = sliderValueToVideoTime(videoPlayerState.duration, min);
       const maxTime = sliderValueToVideoTime(videoPlayerState.duration, max);
 
@@ -48,13 +38,12 @@ const VideoEditor = () => {
         videoPlayer.seek(minTime);
       }
       if (videoPlayerState.currentTime > maxTime) {
-        videoPlayer.seek(minTime);
+        videoPlayer.seek(maxTime);
       }
     }
-  }, [videoPlayerState]);
+  }, [sliderValues, videoPlayerState]);
 
   useEffect(() => {
-    // 선택된 비디오 파일이 없을 경우 초기화
     if (!videoFile) {
       setVideoPlayerState(undefined);
       setVideoPlayer(undefined);
@@ -74,7 +63,6 @@ const VideoEditor = () => {
       >
         <h1 className={styles.title}>Video Edit</h1>
 
-        {/* 비디오 파일 O => 파일 재선택 버튼 */}
         {videoFile && (
           <div>
             <input
@@ -96,24 +84,21 @@ const VideoEditor = () => {
       </div>
 
       <section>
-        {/* 비디오 파일 O => video player 표시 */}
         {videoFile ? (
           <VideoPlayer
             src={videoFile}
             onPlayerChange={(videoPlayer) => {
-              setVideoPlayer(videoPlayer); // 비디오 플레이어 인스턴스 설정
+              setVideoPlayer(videoPlayer);
             }}
             onChange={(videoPlayerState) => {
-              setVideoPlayerState(videoPlayerState); // 비디오 플레이어 상태 설정
+              setVideoPlayerState(videoPlayerState);
             }}
           />
         ) : (
           <>
-            {/* 비디오 파일 X => video placeholder 표시 */}
             <div className={styles.video__placeholder}>
               <img src={video_placeholder} alt="비디오를 업로드해주세요." />
             </div>
-            {/* 비디오 업로드 버튼 */}
             <div
               style={{
                 display: "flex",
@@ -139,7 +124,6 @@ const VideoEditor = () => {
         )}
       </section>
 
-      {/*편집 영역  */}
       {videoFile && (
         <>
           <section
@@ -153,7 +137,7 @@ const VideoEditor = () => {
           >
             <MultiRangeSlider
               min={0}
-              max={100}
+              max={videoPlayerState ? videoPlayerState.duration : 100}
               onChange={({ min, max }) => {
                 setSliderValues([min, max]);
               }}
@@ -164,10 +148,10 @@ const VideoEditor = () => {
           <section>
             <VideoConversionButton
               onConversionStart={() => {
-                setProcessing(true); // 변환 시작 시 처리 중 상태 설정
+                setProcessing(true);
               }}
               onConversionEnd={() => {
-                setProcessing(false); // 변환 완료 시 처리 중 상태 해제
+                setProcessing(false);
                 setShowToast(true);
               }}
               ffmpeg={ffmpeg}
@@ -179,10 +163,9 @@ const VideoEditor = () => {
         </>
       )}
 
-      {/* 토스트 메시지 */}
       <ToastContainer
         className="p-3"
-        position={"top-center"}
+        position={"bottom-center"}
         style={{ zIndex: 1 }}
       >
         <Toast

@@ -2,25 +2,36 @@ import { useCallback, useEffect, useState, useRef } from "react";
 import classnames from "classnames";
 import "./multiRangeSlider.css";
 
-export default function MultiRangeSlider({ min, max, onChange, disabled }) {
+export default function MultiRangeSlider({
+  min,
+  max,
+  onChange,
+  duration,
+  videoFile,
+}) {
   const [minVal, setMinVal] = useState(min);
   const [maxVal, setMaxVal] = useState(max);
-  const [duration, setDuration] = useState(max - min);
   const minValRef = useRef(null);
   const maxValRef = useRef(null);
   const range = useRef(null);
 
-  // 비율을 백분율로 변환
+  // 퍼센트 계산 함수
   const getPercent = useCallback(
-    (value) => Math.round(((value - min) / (max - min)) * 100),
-    [min, max]
+    (value) => Math.round((value / duration) * 100),
+    [duration]
   );
 
-  // 왼쪽에서 감소하도록 범위의 너비 설정
+  // 슬라이더 초기화
+  useEffect(() => {
+    setMinVal(min);
+    setMaxVal(duration);
+  }, [videoFile, min, duration]);
+
+  // 최소 값이 변경될 때 범위 너비 설정
   useEffect(() => {
     if (maxValRef.current) {
       const minPercent = getPercent(minVal);
-      const maxPercent = getPercent(+maxValRef.current.value);
+      const maxPercent = getPercent(maxVal);
 
       if (range.current) {
         range.current.style.left = `${minPercent}%`;
@@ -29,10 +40,10 @@ export default function MultiRangeSlider({ min, max, onChange, disabled }) {
     }
   }, [minVal, getPercent]);
 
-  // 오른쪽에서 감소하도록 범위의 너비 설정
+  // 최대 값이 변경될 때 범위 너비 설정
   useEffect(() => {
     if (minValRef.current) {
-      const minPercent = getPercent(+minValRef.current.value);
+      const minPercent = getPercent(minVal);
       const maxPercent = getPercent(maxVal);
 
       if (range.current) {
@@ -41,12 +52,12 @@ export default function MultiRangeSlider({ min, max, onChange, disabled }) {
     }
   }, [maxVal, getPercent]);
 
-  // 상태가 변경될 때 최소 및 최대 값 가져오기
+  // 최소 및 최대 값이 변경될 때 onChange 콜백 호출
   useEffect(() => {
     onChange({ min: minVal, max: maxVal });
-    setDuration(maxVal - minVal); // 슬라이더 값이 변경될 때 총 길이 업데이트
   }, [minVal, maxVal]);
 
+  // 시간을 MM:SS 형식으로 포맷하는 함수
   const formatTimeMMSS = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
@@ -55,6 +66,7 @@ export default function MultiRangeSlider({ min, max, onChange, disabled }) {
     }${remainingSeconds}`;
   };
 
+  // 시간을 한국어 형식으로 포맷하는 함수
   const formatTimeKor = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
@@ -67,12 +79,12 @@ export default function MultiRangeSlider({ min, max, onChange, disabled }) {
     <div style={{ position: "relative", width: "100%" }}>
       <div className="slider">
         <div className="slider__total-duration">
-          재생시간 {formatTimeKor(duration)}
+          재생시간 {formatTimeKor(maxVal - minVal)}
         </div>
         <input
           type="range"
           min={min}
-          max={max}
+          max={duration}
           value={minVal}
           ref={minValRef}
           onChange={(event) => {
@@ -81,13 +93,13 @@ export default function MultiRangeSlider({ min, max, onChange, disabled }) {
             event.target.value = value.toString();
           }}
           className={classnames("thumb thumb--zindex-3", {
-            "thumb--zindex-5": minVal > max - 100,
+            "thumb--zindex-5": minVal > duration - 100,
           })}
         />
         <input
           type="range"
           min={min}
-          max={max}
+          max={duration} ////max 값을 비디오의 총 길이인 duration으로 설정
           value={maxVal}
           ref={maxValRef}
           onChange={(event) => {
@@ -97,8 +109,9 @@ export default function MultiRangeSlider({ min, max, onChange, disabled }) {
           }}
           className="thumb thumb--zindex-4"
         />
-        <div className="slider__track"></div>
-        <div ref={range} className="slider__range"></div>
+
+        <div className="slider__track" />
+        <div ref={range} className="slider__range" />
         <div
           className="slider__left-value"
           style={{ left: `${getPercent(minVal)}%` }}
