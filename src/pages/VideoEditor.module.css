@@ -8,7 +8,7 @@
   }
   
   .upload__btn {
-    width: 100%;
+    width: 400px;
     border-radius: 8px;
     background: cadetblue;
     padding: 16px 8px;
@@ -24,7 +24,7 @@
   .upload__btn:hover,
   .upload__btn:focus,
   .upload__btn:active {
-    background: #1e6662 !important;
+    background: #11257c !important;
     border: none !important;
   }
   .re__upload__btn {
@@ -47,3 +47,19 @@
     background: #1e6662 !important;
     border: none !important;
   }
+  /* YourStyles.module.css */
+
+.video__placeholder {
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%; /* 16:9 */
+  background-color: #f0f0f0;
+  position: relative; /* 부모 요소를 relative로 설정 */
+}
+
+.video__placeholder img {
+  position: absolute; /* 절대 위치 - 부모 요소 내 가운데에 위치 */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* 부모 요소 내 가운데 정렬 */
+}

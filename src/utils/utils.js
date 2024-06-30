@@ -3,13 +3,6 @@
 export const sliderValueToVideoTime = (duration, value) => {
   return (duration * value) / 100;
 };
-
-export const formatTime = (time) => {
-  const minutes = Math.floor(time / 60);
-  const seconds = Math.floor(time % 60);
-  return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
-};
-
 export const toTimeString = (sec, showMilliSeconds = true) => {
   sec = parseFloat(sec);
   let hours = Math.floor(sec / 3600); // get hours
