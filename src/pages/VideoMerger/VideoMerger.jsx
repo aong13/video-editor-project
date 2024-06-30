@@ -1,3 +1,5 @@
+//https://github.com/ffmpegwasm/ffmpeg.wasm/blob/0.11.x/examples/browser/concatDemuxer.html
+
 import { useState, useRef } from "react";
 import { Button } from "react-bootstrap";
 import { createFFmpeg } from "@ffmpeg/ffmpeg";
@@ -9,7 +11,7 @@ const ffmpeg = createFFmpeg({ log: true });
 function VideoMerger() {
   const [videos, setVideos] = useState([]);
   const [processing, setProcessing] = useState(false);
-  const uploadFile = useRef(null); // useRef to access file input element
+  const uploadFile = useRef(null);
 
   const handleVideoUpload = (event) => {
     const files = Array.from(event.target.files);
@@ -66,6 +68,10 @@ function VideoMerger() {
     return new Uint8Array(data);
   };
 
+  const handleVideoRemove = (index) => {
+    setVideos(videos.filter((_, i) => i !== index));
+  };
+
   return (
     <article className="layout" style={{ padding: "56px 16px" }}>
       <div style={{ marginBottom: 32 }}>
@@ -75,23 +81,34 @@ function VideoMerger() {
             accept="video/*"
             multiple
             onChange={handleVideoUpload}
-            style={{ display: "none" }} // hide the input element
-            ref={uploadFile} // assign ref to access the input element
+            style={{ display: "none" }}
+            ref={uploadFile}
           />
-          <Button
-            className={styles.uploadBtn}
-            onClick={() => uploadFile.current.click()} // trigger file input click
-          >
-            파일 선택
-          </Button>
+          {videos.length === 0 && (
+            <Button
+              className={styles.uploadBtn}
+              onClick={() => uploadFile.current.click()}
+            >
+              파일 선택
+            </Button>
+          )}
         </div>
       </div>
 
       {videos.length > 0 && (
         <>
-          <MultiVideoPlayer videos={videos} />
+          <MultiVideoPlayer
+            videos={videos}
+            handleRemove={handleVideoRemove}
+            uploadFile={uploadFile}
+          />
 
-          <Button variant="primary" disabled={processing} onClick={mergeVideos}>
+          <Button
+            variant="primary"
+            disabled={processing}
+            onClick={mergeVideos}
+            className={styles.mergeBtn}
+          >
             {processing ? "병합 중..." : "비디오 병합 및 다운로드"}
           </Button>
         </>

@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
-import styles from "./VideoEditor.module.css";
+import styles from "../VideoEditor.module.css";
 import { Button, Modal, Spinner, Toast, ToastContainer } from "react-bootstrap";
 import { createFFmpeg } from "@ffmpeg/ffmpeg";
 
-import video_placeholder from "../../assets/images/editor/video_placeholder.png";
+import video_placeholder from "../../assets/images/video_placeholder.svg";
 import VideoPlayer from "./VideoPlayer";
 import MultiRangeSlider from "../../components/VideoEditor/MultiRangeSlider";
-import VideoConversionButton from "./VideoConversionButton";
+import VideoConversionButton from "../../components/VideoEditor/VideoConversionButton";
 import { sliderValueToVideoTime } from "../../utils/utils";
 
 const ffmpeg = createFFmpeg({ log: true });
@@ -61,12 +61,10 @@ function VideoEditor() {
     // restoring the default state
     if (!videoFile) {
       setVideoPlayerState(undefined);
-      setVideoPlayerState(undefined);
+      setVideoPlayer(undefined);
     }
     setSliderValues([0, 100]);
   }, [videoFile]);
-
-  if (!ffmpegLoaded) return <div>load</div>;
 
   return (
     <article className="layout" style={{ padding: "56px 16px" }}>
@@ -113,12 +111,16 @@ function VideoEditor() {
           />
         ) : (
           <>
-            <img
-              src={video_placeholder}
-              alt="비디오를 업로드해주세요."
-              style={{ marginBottom: 32 }}
-            />
-            <div>
+            <div className={styles.video__placeholder}>
+              <img src={video_placeholder} alt="비디오를 업로드해주세요." />
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                margin: "20px 0",
+              }}
+            >
               <input
                 onChange={(e) => setVideoFile(e.target.files[0])}
                 type="file"
@@ -154,6 +156,7 @@ function VideoEditor() {
               onChange={({ min, max }) => {
                 setSliderValues([min, max]);
               }}
+              duration={videoPlayerState ? videoPlayerState.duration : 0}
             />
           </section>
 

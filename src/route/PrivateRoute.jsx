@@ -6,7 +6,7 @@ const PrivateRoute = () => {
   return (
     <div>
       <Header />
-      <main>
+      <main style={{ maxWidth: "1288px", margin: "0 auto" }}>
         <Outlet />
       </main>
       <Footer />
