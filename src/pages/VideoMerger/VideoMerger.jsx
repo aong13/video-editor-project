@@ -1,5 +1,3 @@
-//https://github.com/ffmpegwasm/ffmpeg.wasm/blob/0.11.x/examples/browser/concatDemuxer.html
-
 import { useState, useRef } from "react";
 import { Button } from "react-bootstrap";
 import { createFFmpeg } from "@ffmpeg/ffmpeg";
@@ -63,6 +61,7 @@ function VideoMerger() {
     setProcessing(false);
   };
 
+  // 파일을 Uint8Array로 변환
   const fetchFile = async (file) => {
     const data = await file.arrayBuffer();
     return new Uint8Array(data);
