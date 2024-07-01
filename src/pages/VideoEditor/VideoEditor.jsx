@@ -144,7 +144,6 @@ const VideoEditor = () => {
               onChange={({ min, max }) => {
                 setSliderValues([min, max]);
               }}
-              duration={videoPlayerState ? videoPlayerState.duration : 0}
             />
           </section>
 
