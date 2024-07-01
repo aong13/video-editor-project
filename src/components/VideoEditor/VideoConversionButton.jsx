@@ -67,7 +67,7 @@ function VideoConversionButton({
       "-i",
       "input.mp4",
       "-to",
-      `${maxTime - minTime}`, // Use duration instead of absolute time
+      `${maxTime - minTime}`,
       "-c",
       "copy",
       "output.mp4"
