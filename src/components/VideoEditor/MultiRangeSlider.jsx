@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState, useRef } from "react";
 import classnames from "classnames";
 import "./multiRangeSlider.css";
-
+import { formatTimeMMSS, formatTimeKor } from "../../utils/utils";
 export default function MultiRangeSlider({
   min,
   max,
@@ -56,24 +56,6 @@ export default function MultiRangeSlider({
   useEffect(() => {
     onChange({ min: minVal, max: maxVal });
   }, [minVal, maxVal]);
-
-  // 시간을 MM:SS 형식으로 포맷하는 함수
-  const formatTimeMMSS = (seconds) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes < 10 ? "0" : ""}${minutes}:${
-      remainingSeconds < 10 ? "0" : ""
-    }${remainingSeconds}`;
-  };
-
-  // 시간을 한국어 형식으로 포맷하는 함수
-  const formatTimeKor = (seconds) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes < 10 ? "0" : ""}${minutes}분 ${
-      remainingSeconds < 10 ? "0" : ""
-    }${remainingSeconds}초`;
-  };
 
   return (
     <div style={{ position: "relative", width: "100%" }}>
