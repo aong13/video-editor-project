@@ -15,6 +15,9 @@ const ToastMsg = ({ showToast, setShowToast, msg }) => {
           bg="dark"
           autohide
         >
+          <Toast.Header closeButton={false}>
+            <strong className="me-auto">Video Editor</strong>
+          </Toast.Header>
           <Toast.Body>{msg}</Toast.Body>
         </Toast>
       </ToastContainer>

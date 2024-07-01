@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import styles from "../VideoEditor.module.css";
-import { Button, Toast, ToastContainer } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import { createFFmpeg } from "@ffmpeg/ffmpeg";
 
 import video_placeholder from "../../assets/images/video_placeholder.svg";
