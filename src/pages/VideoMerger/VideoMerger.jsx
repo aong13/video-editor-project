@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { Button } from "react-bootstrap";
-import { createFFmpeg } from "@ffmpeg/ffmpeg";
+import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
 import MultiVideoPlayer from "./MultiVideoPlayer";
 import styles from "../VideoEditor.module.css";
 import ProcessingModal from "../../components/VideoEditor/ProcessingModal";
@@ -61,13 +61,6 @@ function VideoMerger() {
     URL.revokeObjectURL(url);
     setProcessing(false);
   };
-
-  // 파일을 Uint8Array로 변환
-  const fetchFile = async (file) => {
-    const data = await file.arrayBuffer();
-    return new Uint8Array(data);
-  };
-
   const handleVideoRemove = (index) => {
     setVideos(videos.filter((_, i) => i !== index));
   };
