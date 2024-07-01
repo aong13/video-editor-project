@@ -3,6 +3,23 @@
 export const sliderValueToVideoTime = (duration, sliderValue) => {
   return (sliderValue / 100) * duration;
 };
+
+export const formatTimeMMSS = (seconds) => {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  return `${minutes < 10 ? "0" : ""}${minutes}:${
+    remainingSeconds < 10 ? "0" : ""
+  }${remainingSeconds}`;
+};
+
+export const formatTimeKor = (seconds) => {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  return `${minutes < 10 ? "0" : ""}${minutes}분 ${
+    remainingSeconds < 10 ? "0" : ""
+  }${remainingSeconds}초`;
+};
+
 export const toTimeString = (sec, showMilliSeconds = true) => {
   sec = parseFloat(sec);
   let hours = Math.floor(sec / 3600); // get hours
