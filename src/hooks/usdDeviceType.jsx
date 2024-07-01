@@ -20,7 +20,7 @@ const useDeviceType = () => {
 
   useLayoutEffect(() => {
     updateDeviceType();
-    window.addEventListenr("resize", updateDeviceType);
+    window.addEventListener("resize", updateDeviceType);
     return () => {
       window.removeEventListener("resize", updateDeviceType);
     };
