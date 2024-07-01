@@ -3,7 +3,7 @@ import classnames from "classnames";
 import "./multiRangeSlider.css";
 import { formatTimeMMSS, formatTimeKor } from "../../utils/utils";
 
-export default function MultiRangeSlider({ min, max, onChange, videoFile }) {
+const MultiRangeSlider = ({ min, max, onChange }) => {
   const [minVal, setMinVal] = useState(min);
   const [maxVal, setMaxVal] = useState(max);
   const [duration, setDuration] = useState(max - min);
@@ -16,45 +16,43 @@ export default function MultiRangeSlider({ min, max, onChange, videoFile }) {
     [min, max]
   );
 
-  // 슬라이더 초기화
+  //초기화
   useEffect(() => {
-    const intMin = Math.floor(min);
-    const intMax = Math.ceil(max);
-    setMinVal(intMin);
-    setMaxVal(intMax);
-    setDuration(intMax - intMin);
-  }, [videoFile, min, max]);
+    setMinVal(Math.floor(min));
+    setMaxVal(Math.ceil(max));
+    setDuration(Math.ceil(max) - Math.floor(min));
+  }, [min, max]);
 
   // 최소 값이 변경될 때 범위 너비 설정
   useEffect(() => {
     if (maxValRef.current) {
       const minPercent = getPercent(minVal);
-      const maxPercent = getPercent(maxVal);
+      const maxPercent = getPercent(+maxValRef.current.value); // Precede with '+' to convert the value from type string to type number
 
       if (range.current) {
         range.current.style.left = `${minPercent}%`;
         range.current.style.width = `${maxPercent - minPercent}%`;
       }
     }
-  }, [minVal, getPercent, maxVal]);
+  }, [minVal, getPercent]);
 
   // 최대 값이 변경될 때 범위 너비 설정
   useEffect(() => {
     if (minValRef.current) {
-      const minPercent = getPercent(minVal);
+      const minPercent = getPercent(+minValRef.current.value);
       const maxPercent = getPercent(maxVal);
 
       if (range.current) {
         range.current.style.width = `${maxPercent - minPercent}%`;
       }
     }
-  }, [maxVal, getPercent, minVal]);
+  }, [maxVal, getPercent]);
 
   // 최소 및 최대 값이 변경될 때 onChange 콜백 호출
   useEffect(() => {
     onChange({ min: minVal, max: maxVal });
-    setDuration(maxVal - minVal);
-  }, [minVal, maxVal, onChange]);
+    setDuration(maxVal - minVal); // 슬라이더 값이 변경될 때 총 길이 업데이트
+  }, [minVal, maxVal]);
 
   return (
     <div style={{ position: "relative", width: "100%" }}>
@@ -107,4 +105,5 @@ export default function MultiRangeSlider({ min, max, onChange, videoFile }) {
       </div>
     </div>
   );
-}
+};
+export default MultiRangeSlider;

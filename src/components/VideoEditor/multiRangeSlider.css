@@ -7,8 +7,7 @@
 .slider__track,
 .slider__range,
 .slider__left-value,
-.slider__right-value,
-.slider__total-duration {
+.slider__right-value {
   position: absolute;
 }
 
@@ -50,7 +49,6 @@
 }
 
 .slider__right-value {
-transform: translateX(-100%);
   white-space: nowrap;
 }
 
@@ -66,7 +64,7 @@ transform: translateX(-100%);
   pointer-events: none;
   position: absolute;
   height: 0;
-  width: 100%; 
+  width:101.5%; 
   outline: none;
 }
 
