@@ -10,9 +10,12 @@ import VideoConversionButton from "../../components/VideoEditor/VideoConversionB
 import { sliderValueToVideoTime } from "../../utils/utils";
 import ProcessingModal from "../../components/VideoEditor/ProcessingModal";
 
+import useDeviceType from "../../hooks/usdDeviceType";
+
 const ffmpeg = createFFmpeg({ log: true });
 
 const VideoEditor = () => {
+  const deice = useDeviceType();
   const [ffmpegLoaded, setFFmpegLoaded] = useState(false);
   const [videoFile, setVideoFile] = useState();
   const [videoPlayerState, setVideoPlayerState] = useState();
