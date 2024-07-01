@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { Button } from "react-bootstrap";
-import { createFFmpeg } from "@ffmpeg/ffmpeg";
+import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
 import MultiVideoPlayer from "./MultiVideoPlayer";
 import styles from "../VideoEditor.module.css";
 import ProcessingModal from "../../components/VideoEditor/ProcessingModal";
@@ -61,19 +61,15 @@ function VideoMerger() {
     URL.revokeObjectURL(url);
     setProcessing(false);
   };
-
-  // 파일을 Uint8Array로 변환
-  const fetchFile = async (file) => {
-    const data = await file.arrayBuffer();
-    return new Uint8Array(data);
-  };
-
   const handleVideoRemove = (index) => {
     setVideos(videos.filter((_, i) => i !== index));
   };
 
   return (
     <article className="layout" style={{ padding: "56px 16px" }}>
+      <h1 className={styles.title} style={{ marginBottom: 16 }}>
+        Merge Video
+      </h1>
       <div style={{ marginBottom: 32 }}>
         <div className={styles.uploadSection}>
           <input
@@ -102,23 +98,21 @@ function VideoMerger() {
             handleRemove={handleVideoRemove}
             uploadFile={uploadFile}
           />
-          <div style={{ marginTop: 20 }}>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                margin: "20px 0",
-              }}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              margin: "20px 0",
+            }}
+          >
+            <Button
+              variant="primary"
+              disabled={processing}
+              onClick={mergeVideos}
+              className={styles.upload__btn}
             >
-              <Button
-                variant="primary"
-                disabled={processing}
-                onClick={mergeVideos}
-                className={styles.upload__btn}
-              >
-                비디오 병합 및 다운로드
-              </Button>
-            </div>
+              비디오 병합 및 다운로드
+            </Button>
           </div>
         </>
       )}
