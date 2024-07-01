@@ -1,3 +1,4 @@
+import React from "react";
 import { Button } from "antd";
 import { fetchFile } from "@ffmpeg/ffmpeg";
 import { readFileAsBase64, sliderValueToVideoTime } from "../../utils/utils";
@@ -13,7 +14,6 @@ function VideoConversionButton({
   ffmpeg,
   onConversionStart = () => {},
   onConversionEnd = () => {},
-  onGifCreated = () => {},
 }) {
   const convertToGif = async () => {
     onConversionStart(true);
@@ -66,8 +66,8 @@ function VideoConversionButton({
       `${minTime}`,
       "-i",
       "input.mp4",
-      "-t",
-      `${maxTime}`,
+      "-to",
+      `${maxTime - minTime}`, // Use duration instead of absolute time
       "-c",
       "copy",
       "output.mp4"
@@ -129,7 +129,7 @@ function VideoConversionButton({
   return (
     <div className={styles.buttonContainer}>
       <div className={styles.buttonItem}>
-        <Button onClick={() => convertToGif()} className="gif__out__btn">
+        <Button onClick={convertToGif} className="gif__out__btn">
           <img src={out} alt="GIF 내보내기" />
           <p style={{ color: "#383838", fontSize: 16, fontWeight: 700 }}>
             GIF 내보내기
@@ -137,7 +137,7 @@ function VideoConversionButton({
         </Button>
       </div>
       <div className={styles.buttonItem}>
-        <Button onClick={() => onCutTheVideo()} className="gif__out__btn">
+        <Button onClick={onCutTheVideo} className="gif__out__btn">
           <img src={dark_download} alt="비디오 저장하기" />
           <p style={{ color: "#383838", fontSize: 16, fontWeight: 700 }}>
             비디오 저장하기
@@ -145,7 +145,7 @@ function VideoConversionButton({
         </Button>
       </div>
       <div className={styles.buttonItem}>
-        <Button onClick={() => convertToAudio()} className="gif__out__btn">
+        <Button onClick={convertToAudio} className="gif__out__btn">
           <img src={audio} alt="오디오로 변환하기" />
           <p style={{ color: "#383838", fontSize: 16, fontWeight: 700 }}>
             오디오로 변환하기

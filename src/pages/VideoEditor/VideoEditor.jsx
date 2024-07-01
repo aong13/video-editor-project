@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import styles from "../VideoEditor.module.css";
-import { Button, Modal, Spinner, Toast, ToastContainer } from "react-bootstrap";
+import { Button, Toast, ToastContainer } from "react-bootstrap";
 import { createFFmpeg } from "@ffmpeg/ffmpeg";
 
 import video_placeholder from "../../assets/images/video_placeholder.svg";
@@ -8,41 +8,29 @@ import VideoPlayer from "./VideoPlayer";
 import MultiRangeSlider from "../../components/VideoEditor/MultiRangeSlider";
 import VideoConversionButton from "../../components/VideoEditor/VideoConversionButton";
 import { sliderValueToVideoTime } from "../../utils/utils";
+import ProcessingModal from "../../components/VideoEditor/ProcessingModal";
 
 const ffmpeg = createFFmpeg({ log: true });
 
-function VideoEditor() {
+const VideoEditor = () => {
   const [ffmpegLoaded, setFFmpegLoaded] = useState(false);
   const [videoFile, setVideoFile] = useState();
   const [videoPlayerState, setVideoPlayerState] = useState();
   const [videoPlayer, setVideoPlayer] = useState();
   const [sliderValues, setSliderValues] = useState([0, 100]);
   const [processing, setProcessing] = useState(false);
-  const [show, setShow] = useState(false);
+  const [showToast, setShowToast] = useState(false);
   const uploadFile = useRef("");
 
   useEffect(() => {
-    // loading ffmpeg on startup
     ffmpeg.load().then(() => {
       setFFmpegLoaded(true);
     });
   }, []);
 
   useEffect(() => {
-    const min = sliderValues[0];
-    // when the slider values are updated, updating the
-    // video time
-    if (min !== undefined && videoPlayerState && videoPlayer) {
-      videoPlayer.seek(sliderValueToVideoTime(videoPlayerState.duration, min));
-    }
-  }, [sliderValues]);
-
-  useEffect(() => {
     if (videoPlayer && videoPlayerState) {
-      // allowing users to watch only the portion of
-      // the video selected by the slider
       const [min, max] = sliderValues;
-
       const minTime = sliderValueToVideoTime(videoPlayerState.duration, min);
       const maxTime = sliderValueToVideoTime(videoPlayerState.duration, max);
 
@@ -50,15 +38,12 @@ function VideoEditor() {
         videoPlayer.seek(minTime);
       }
       if (videoPlayerState.currentTime > maxTime) {
-        // looping logic
-        videoPlayer.seek(minTime);
+        videoPlayer.seek(maxTime);
       }
     }
-  }, [videoPlayerState]);
+  }, [sliderValues, videoPlayerState]);
 
   useEffect(() => {
-    // when the current videoFile is removed,
-    // restoring the default state
     if (!videoFile) {
       setVideoPlayerState(undefined);
       setVideoPlayer(undefined);
@@ -152,7 +137,7 @@ function VideoEditor() {
           >
             <MultiRangeSlider
               min={0}
-              max={100}
+              max={videoPlayerState ? videoPlayerState.duration : 100}
               onChange={({ min, max }) => {
                 setSliderValues([min, max]);
               }}
@@ -167,7 +152,7 @@ function VideoEditor() {
               }}
               onConversionEnd={() => {
                 setProcessing(false);
-                setShow(true);
+                setShowToast(true);
               }}
               ffmpeg={ffmpeg}
               videoPlayerState={videoPlayerState}
@@ -180,12 +165,12 @@ function VideoEditor() {
 
       <ToastContainer
         className="p-3"
-        position={"top-center"}
+        position={"bottom-center"}
         style={{ zIndex: 1 }}
       >
         <Toast
-          onClose={() => setShow(false)}
-          show={show}
+          onClose={() => setShowToast(false)}
+          show={showToast}
           delay={2000}
           bg="dark"
           autohide
@@ -197,33 +182,9 @@ function VideoEditor() {
         </Toast>
       </ToastContainer>
 
-      <Modal
-        show={processing}
-        onHide={() => setProcessing(false)}
-        backdrop={false}
-        keyboard={false}
-        centered
-        size="sm"
-      >
-        <div style={{ textAlign: "center" }}>
-          <Spinner animation="border" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </Spinner>
-
-          <p
-            style={{
-              marginTop: 16,
-              fontSize: 14,
-              fontWeight: 600,
-              color: "#c8c8c8",
-            }}
-          >
-            내보내기가 진행중입니다.
-          </p>
-        </div>
-      </Modal>
+      <ProcessingModal processing={processing} setProcessing={setProcessing} />
     </article>
   );
-}
+};
 
 export default VideoEditor;

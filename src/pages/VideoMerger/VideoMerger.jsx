@@ -1,10 +1,9 @@
-//https://github.com/ffmpegwasm/ffmpeg.wasm/blob/0.11.x/examples/browser/concatDemuxer.html
-
 import { useState, useRef } from "react";
 import { Button } from "react-bootstrap";
 import { createFFmpeg } from "@ffmpeg/ffmpeg";
 import MultiVideoPlayer from "./MultiVideoPlayer";
 import styles from "../VideoEditor.module.css";
+import ProcessingModal from "../../components/VideoEditor/ProcessingModal";
 
 const ffmpeg = createFFmpeg({ log: true });
 
@@ -63,6 +62,7 @@ function VideoMerger() {
     setProcessing(false);
   };
 
+  // 파일을 Uint8Array로 변환
   const fetchFile = async (file) => {
     const data = await file.arrayBuffer();
     return new Uint8Array(data);
@@ -102,17 +102,27 @@ function VideoMerger() {
             handleRemove={handleVideoRemove}
             uploadFile={uploadFile}
           />
-
-          <Button
-            variant="primary"
-            disabled={processing}
-            onClick={mergeVideos}
-            className={styles.mergeBtn}
-          >
-            {processing ? "병합 중..." : "비디오 병합 및 다운로드"}
-          </Button>
+          <div style={{ marginTop: 20 }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                margin: "20px 0",
+              }}
+            >
+              <Button
+                variant="primary"
+                disabled={processing}
+                onClick={mergeVideos}
+                className={styles.upload__btn}
+              >
+                비디오 병합 및 다운로드
+              </Button>
+            </div>
+          </div>
         </>
       )}
+      <ProcessingModal processing={processing} setProcessing={setProcessing} />
     </article>
   );
 }
