@@ -4,12 +4,12 @@ import { Button, Toast, ToastContainer } from "react-bootstrap";
 import { createFFmpeg } from "@ffmpeg/ffmpeg";
 
 import video_placeholder from "../../assets/images/video_placeholder.svg";
-import VideoPlayer from "./VideoPlayer";
+import VideoPlayer from "../../utils/VideoPlayer";
 import MultiRangeSlider from "../../components/VideoEditor/MultiRangeSlider";
 import VideoConversionButton from "../../components/VideoEditor/VideoConversionButton";
 import { sliderValueToVideoTime } from "../../utils/utils";
 import ProcessingModal from "../../components/VideoEditor/ProcessingModal";
-
+import ToastMsg from "../../components/VideoEditor/ToastMsg";
 import useDeviceType from "../../hooks/usdDeviceType";
 
 const ffmpeg = createFFmpeg({ log: true });
@@ -165,27 +165,12 @@ const VideoEditor = () => {
           </section>
         </>
       )}
-
-      <ToastContainer
-        className="p-3"
-        position={"bottom-center"}
-        style={{ zIndex: 1 }}
-      >
-        <Toast
-          onClose={() => setShowToast(false)}
-          show={showToast}
-          delay={2000}
-          bg="dark"
-          autohide
-        >
-          <Toast.Header closeButton={false}>
-            <strong className="me-auto">Video Editor</strong>
-          </Toast.Header>
-          <Toast.Body>내보내기가 완료되었습니다.</Toast.Body>
-        </Toast>
-      </ToastContainer>
-
-      <ProcessingModal processing={processing} setProcessing={setProcessing} />
+      <ToastMsg showToast={showToast} setShowToast={setShowToast} />
+      <ProcessingModal
+        processing={processing}
+        setProcessing={setProcessing}
+        msg="내보내기가 완료되었습니다."
+      />
     </article>
   );
 };
