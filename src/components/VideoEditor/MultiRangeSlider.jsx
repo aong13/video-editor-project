@@ -15,7 +15,6 @@ export default function MultiRangeSlider({
   const maxValRef = useRef(null);
   const range = useRef(null);
 
-  // 퍼센트 계산 함수
   const getPercent = useCallback(
     (value) => Math.round((value / duration) * 100),
     [duration]
