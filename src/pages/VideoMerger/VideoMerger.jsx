@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { Button } from "react-bootstrap";
 import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
 import MultiVideoPlayer from "./MultiVideoPlayer";
@@ -16,6 +16,20 @@ function VideoMerger() {
   const handleVideoUpload = (event) => {
     const files = Array.from(event.target.files);
     setVideos((prevVideos) => [...prevVideos, ...files]);
+  };
+
+  const moveVideo = (index, direction) => {
+    const newVideos = [...videos];
+    if (direction === "backward" && index > 0) {
+      const temp = newVideos[index - 1];
+      newVideos[index - 1] = newVideos[index];
+      newVideos[index] = temp;
+    } else if (direction === "forward" && index < newVideos.length - 1) {
+      const temp = newVideos[index + 1];
+      newVideos[index + 1] = newVideos[index];
+      newVideos[index] = temp;
+    }
+    setVideos(newVideos);
   };
 
   const mergeVideos = async () => {
@@ -62,6 +76,7 @@ function VideoMerger() {
     URL.revokeObjectURL(url);
     setProcessing(false);
   };
+
   const handleVideoRemove = (index) => {
     setVideos(videos.filter((_, i) => i !== index));
   };
@@ -82,21 +97,30 @@ function VideoMerger() {
             ref={uploadFile}
           />
           {videos.length === 0 && (
-            <Button
-              className={styles.uploadBtn}
-              onClick={() => uploadFile.current.click()}
-            >
-              파일 선택
-            </Button>
+            <>
+              <Button
+                className={styles.uploadBtn}
+                onClick={() => uploadFile.current.click()}
+              >
+                파일 선택
+              </Button>
+              <p>비디오를 여러 개 선택해주세요.</p>
+            </>
           )}
         </div>
       </div>
 
       {videos.length > 0 && (
         <>
+          <p>
+            비디오를 삭제하거나 순서를 변경할 수 있습니다.
+            <br /> 병합하고자 하는 영상을 선택하고 순서를 조정한 후 다운로드
+            하세요.
+          </p>
           <MultiVideoPlayer
             videos={videos}
             handleRemove={handleVideoRemove}
+            moveVideo={moveVideo} // moveVideo 전달
             uploadFile={uploadFile}
           />
           <div
