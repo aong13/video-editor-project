@@ -11,6 +11,7 @@ import { sliderValueToVideoTime } from "../../utils/utils";
 import ProcessingModal from "../../components/VideoEditor/ProcessingModal";
 import ToastMsg from "../../components/VideoEditor/ToastMsg";
 import useDeviceType from "../../hooks/usdDeviceType";
+import FileNameInput from "../../components/FileNameInput";
 
 const ffmpeg = createFFmpeg({ log: true });
 
@@ -154,16 +155,10 @@ const VideoEditor = () => {
               marginBottom: 20,
             }}
           >
-            <div style={{ display: "flex" }}>
-              <label className={styles.label}>출력파일명</label>
-              <input
-                type="text"
-                placeholder="파일명"
-                value={customFileName}
-                onChange={(e) => setCustomFileName(e.target.value)}
-                className={styles.input}
-              />
-            </div>
+            <FileNameInput
+              customFileName={customFileName}
+              setCustomFileName={setCustomFileName}
+            />
           </section>
 
           <section>
@@ -184,12 +179,12 @@ const VideoEditor = () => {
           </section>
         </>
       )}
-      <ToastMsg showToast={showToast} setShowToast={setShowToast} />
-      <ProcessingModal
-        processing={processing}
-        setProcessing={setProcessing}
+      <ToastMsg
+        showToast={showToast}
+        setShowToast={setShowToast}
         msg="내보내기가 완료되었습니다."
       />
+      <ProcessingModal processing={processing} setProcessing={setProcessing} />
     </article>
   );
 };

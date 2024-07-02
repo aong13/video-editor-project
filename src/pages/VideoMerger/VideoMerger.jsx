@@ -4,7 +4,8 @@ import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
 import MultiVideoPlayer from "./MultiVideoPlayer";
 import styles from "../VideoEditor.module.css";
 import ProcessingModal from "../../components/VideoEditor/ProcessingModal";
-import ExportButton from "../../components/StyledButton";
+import ExportButton, { ButtonContainer } from "../../components/StyledButton";
+import FileNameInput from "../../components/FileNameInput";
 
 const ffmpeg = createFFmpeg({ log: true });
 
@@ -12,6 +13,8 @@ function VideoMerger() {
   const [videos, setVideos] = useState([]);
   const [processing, setProcessing] = useState(false);
   const uploadFile = useRef(null);
+
+  const [customFileName, setCustomFileName] = useState("");
 
   const handleVideoUpload = (event) => {
     const files = Array.from(event.target.files);
@@ -59,10 +62,10 @@ function VideoMerger() {
       "concat.txt",
       "-c",
       "copy",
-      "output.mp4"
+      `${customFileName}.mp4`
     );
 
-    const data = ffmpeg.FS("readFile", "output.mp4");
+    const data = ffmpeg.FS("readFile", `${customFileName}.mp4`);
 
     const url = URL.createObjectURL(
       new Blob([data.buffer], { type: "video/mp4" })
@@ -70,7 +73,7 @@ function VideoMerger() {
     const a = document.createElement("a");
     a.style.display = "none";
     a.href = url;
-    a.download = "merged-video.mp4";
+    a.download = `${customFileName}.mp4`;
     document.body.appendChild(a);
     a.click();
     URL.revokeObjectURL(url);
@@ -82,7 +85,10 @@ function VideoMerger() {
   };
 
   return (
-    <article className="layout" style={{ padding: "56px 16px" }}>
+    <article
+      className="layout"
+      style={{ padding: "56px 16px", marginBottom: 60 }}
+    >
       <h1 className={styles.title} style={{ marginBottom: 16 }}>
         Merge Video
       </h1>
@@ -104,7 +110,7 @@ function VideoMerger() {
               >
                 파일 선택
               </Button>
-              <p>비디오를 여러 개 선택해주세요.</p>
+              <p style={{ marginTop: 20 }}>비디오를 여러 개 선택해주세요.</p>
             </>
           )}
         </div>
@@ -112,7 +118,7 @@ function VideoMerger() {
 
       {videos.length > 0 && (
         <>
-          <p>
+          <p style={{ marginBottom: 50 }}>
             비디오를 삭제하거나 순서를 변경할 수 있습니다.
             <br /> 병합하고자 하는 영상을 선택하고 순서를 조정한 후 다운로드
             하세요.
@@ -123,18 +129,24 @@ function VideoMerger() {
             moveVideo={moveVideo} // moveVideo 전달
             uploadFile={uploadFile}
           />
-          <div
+          <section
             style={{
               display: "flex",
               justifyContent: "center",
-              margin: "20px 0",
+              margin: "30px 0",
             }}
           >
+            <FileNameInput
+              customFileName={customFileName}
+              setCustomFileName={setCustomFileName}
+            />
+          </section>
+          <ButtonContainer>
             <ExportButton
               onClick={mergeVideos}
               buttonText="비디오 병합 및 다운로드"
             />
-          </div>
+          </ButtonContainer>
         </>
       )}
       <ProcessingModal processing={processing} setProcessing={setProcessing} />

@@ -1,6 +1,5 @@
 .title {
     color: #0e3487;
-    font-family: SUIT;
     font-size: 20px;
     font-style: normal;
     font-weight: 800;
@@ -43,7 +42,7 @@
   .re__upload__btn:hover,
   .re__upload__btn:focus,
   .re__upload__btn:active {
-    background: #1e6662 !important;
+    background: #030098 !important;
     border: none !important;
   }
 
