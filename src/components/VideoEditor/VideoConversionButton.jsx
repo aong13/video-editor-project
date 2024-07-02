@@ -13,7 +13,6 @@ function VideoConversionButton({
   videoFile,
   ffmpeg,
   customFileName,
-  customFileName,
   onConversionStart = () => {},
   onConversionEnd = () => {},
 }) {
@@ -34,7 +33,7 @@ function VideoConversionButton({
       inputFileName,
       "-ss",
       `${minTime}`,
-      "-to",
+      "-t",
       `${maxTime}`,
       "-f",
       "gif",
@@ -51,44 +50,20 @@ function VideoConversionButton({
     link.href = gifUrl;
     link.setAttribute("download", outputFileName);
     link.click();
-    const link = document.createElement("a");
-    link.href = gifUrl;
-    link.setAttribute("download", outputFileName);
-    link.click();
 
     onConversionEnd(false);
   };
 
   const onCutTheVideo = async () => {
     onConversionStart(true);
-
-    const inputFileName = "input.mp4";
-    const outputFileName = `${customFileName}.mp4`;
-    onConversionStart(true);
-
     const inputFileName = "input.mp4";
     const outputFileName = `${customFileName}.mp4`;
 
     const [min, max] = sliderValues;
     const minTime = sliderValueToVideoTime(videoPlayerState.duration, min);
+    //const maxTime = sliderValueToVideoTime(videoPlayerState.duration, max);
     const duration = max - min;
-    const [min, max] = sliderValues;
-    const minTime = sliderValueToVideoTime(videoPlayerState.duration, min);
-    const duration = max - min;
-
-    ffmpeg.FS("writeFile", "input.mp4", await fetchFile(videoFile));
-    await ffmpeg.run(
-      "-ss",
-      `${minTime}`,
-      "-i",
-      inputFileName,
-      "-t",
-      `${duration}`,
-      "-c",
-      "copy",
-      outputFileName
-    );
-    ffmpeg.FS("writeFile", "input.mp4", await fetchFile(videoFile));
+    ffmpeg.FS("writeFile", inputFileName, await fetchFile(videoFile));
     await ffmpeg.run(
       "-ss",
       `${minTime}`,
@@ -101,15 +76,11 @@ function VideoConversionButton({
       outputFileName
     );
 
-    const data = ffmpeg.FS("readFile", "output.mp4");
+    const data = ffmpeg.FS("readFile", outputFileName);
     const dataURL = await readFileAsBase64(
       new Blob([data.buffer], { type: "video/mp4" })
     );
 
-    const link = document.createElement("a");
-    link.href = dataURL;
-    link.setAttribute("download", outputFileName);
-    link.click();
     const link = document.createElement("a");
     link.href = dataURL;
     link.setAttribute("download", outputFileName);
@@ -150,10 +121,6 @@ function VideoConversionButton({
       new Blob([data.buffer], { type: "audio/mpeg" })
     );
 
-    const link = document.createElement("a");
-    link.href = audioUrl;
-    link.setAttribute("download", outputFileName);
-    link.click();
     const link = document.createElement("a");
     link.href = audioUrl;
     link.setAttribute("download", outputFileName);
