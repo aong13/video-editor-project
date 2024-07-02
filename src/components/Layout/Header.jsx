@@ -4,10 +4,7 @@ import logo from "../../assets/logo.svg";
 
 const Header = () => {
   return (
-    <Navbar
-      expand="lg"
-      style={{ boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.05)", height: "80px" }}
-    >
+    <Navbar expand="lg" className="shadow-sm">
       <Container>
         <Navbar.Brand as={Link} to="/edit-video">
           <img src={logo} alt="로고이미지" />
