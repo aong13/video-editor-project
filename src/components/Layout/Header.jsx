@@ -9,7 +9,7 @@ const Header = () => {
       style={{ boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.05)", height: "80px" }}
     >
       <Container>
-        <Navbar.Brand as={Link} to="/">
+        <Navbar.Brand as={Link} to="/edit-video">
           <img src={logo} alt="로고이미지" />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
