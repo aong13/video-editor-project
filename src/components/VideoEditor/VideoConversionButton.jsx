@@ -15,43 +15,54 @@ function VideoConversionButton({
   customFileName,
   onConversionStart = () => {},
   onConversionEnd = () => {},
+  customFileName,
 }) {
+  const inputFileName = "input.mp4";
+
   const convertToGif = async () => {
-    onConversionStart(true);
+    try {
+      onConversionStart(true);
+      const outputNameGif = `${customFileName || "output"}.gif`;
 
     const inputFileName = "input.mp4";
     const outputFileName = `${customFileName}.gif`;
 
     ffmpeg.FS("writeFile", inputFileName, await fetchFile(videoFile));
 
-    const [min, max] = sliderValues;
-    const minTime = sliderValueToVideoTime(videoPlayerState.duration, min);
-    const maxTime = sliderValueToVideoTime(videoPlayerState.duration, max);
+      const [min, max] = sliderValues;
+      const minTime = sliderValueToVideoTime(videoPlayerState.duration, min);
+      const maxTime = sliderValueToVideoTime(videoPlayerState.duration, max);
 
-    await ffmpeg.run(
-      "-i",
-      inputFileName,
-      "-ss",
-      `${minTime}`,
-      "-to",
-      `${maxTime}`,
-      "-f",
-      "gif",
-      outputFileName
-    );
+      await ffmpeg.run(
+        "-i",
+        inputFileName,
+        "-ss",
+        `${minTime}`,
+        "-to",
+        `${maxTime}`,
+        "-vf",
+        "fps=10,scale=320:-1:flags=lanczos",
+        "-f",
+        "gif",
+        outputNameGif
+      );
 
-    const data = ffmpeg.FS("readFile", outputFileName);
+      const data = ffmpeg.FS("readFile", outputNameGif);
 
-    const gifUrl = URL.createObjectURL(
-      new Blob([data.buffer], { type: "image/gif" })
-    );
+      const gifUrl = URL.createObjectURL(
+        new Blob([data.buffer], { type: "image/gif" })
+      );
 
     const link = document.createElement("a");
     link.href = gifUrl;
     link.setAttribute("download", outputFileName);
     link.click();
 
-    onConversionEnd(false);
+      onConversionEnd(false);
+    } catch (error) {
+      console.error("Error during GIF conversion:", error);
+      onConversionEnd(false);
+    }
   };
 
   const onCutTheVideo = async () => {
@@ -77,57 +88,67 @@ function VideoConversionButton({
       outputFileName
     );
 
-    const data = ffmpeg.FS("readFile", "output.mp4");
-    const dataURL = await readFileAsBase64(
-      new Blob([data.buffer], { type: "video/mp4" })
-    );
+      const data = ffmpeg.FS("readFile", outputNameMP4);
+      const dataURL = await readFileAsBase64(
+        new Blob([data.buffer], { type: "video/mp4" })
+      );
 
     const link = document.createElement("a");
     link.href = dataURL;
     link.setAttribute("download", outputFileName);
     link.click();
 
-    onConversionEnd(false);
+      onConversionEnd(false);
+    } catch (error) {
+      console.error("Error during video cutting:", error);
+      onConversionEnd(false);
+    }
   };
 
   const convertToAudio = async () => {
-    onConversionStart(true);
+    try {
+      onConversionStart(true);
+      const outputNameMP3 = `${customFileName || "output"}.mp3`;
 
     const inputFileName = "input.mp4";
     const outputFileName = `${customFileName}.mp3`;
 
     ffmpeg.FS("writeFile", inputFileName, await fetchFile(videoFile));
 
-    const [min, max] = sliderValues;
-    const minTime = sliderValueToVideoTime(videoPlayerState.duration, min);
-    const maxTime = sliderValueToVideoTime(videoPlayerState.duration, max);
+      const [min, max] = sliderValues;
+      const minTime = sliderValueToVideoTime(videoPlayerState.duration, min);
+      const maxTime = sliderValueToVideoTime(videoPlayerState.duration, max);
 
-    await ffmpeg.run(
-      "-i",
-      inputFileName,
-      "-ss",
-      `${minTime}`,
-      "-to",
-      `${maxTime}`,
-      "-q:a",
-      "0",
-      "-map",
-      "a",
-      outputFileName
-    );
+      await ffmpeg.run(
+        "-ss",
+        `${minTime}`,
+        "-to",
+        `${maxTime}`,
+        "-i",
+        inputFileName,
+        "-q:a",
+        "0",
+        "-map",
+        "a",
+        outputNameMP3
+      );
 
-    const data = ffmpeg.FS("readFile", outputFileName);
+      const data = ffmpeg.FS("readFile", outputNameMP3);
 
-    const audioUrl = URL.createObjectURL(
-      new Blob([data.buffer], { type: "audio/mpeg" })
-    );
+      const audioUrl = URL.createObjectURL(
+        new Blob([data.buffer], { type: "audio/mpeg" })
+      );
 
     const link = document.createElement("a");
     link.href = audioUrl;
     link.setAttribute("download", outputFileName);
     link.click();
 
-    onConversionEnd(false);
+      onConversionEnd(false);
+    } catch (error) {
+      console.error("Error during audio conversion:", error);
+      onConversionEnd(false);
+    }
   };
 
   return (

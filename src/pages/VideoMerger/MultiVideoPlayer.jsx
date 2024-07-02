@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./MultiVideoPlayer.module.css";
 import plus_icon from "../../assets/icons/plus.svg";
+
 const MAX_TITLE_LENGTH = 30; // max 이상 생략
 
 const MultiVideoPlayer = ({ videos, handleRemove, uploadFile }) => {

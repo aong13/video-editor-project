@@ -1,5 +1,5 @@
 .title {
-    color: #2a7299;
+    color: #0e3487;
     font-family: SUIT;
     font-size: 20px;
     font-style: normal;
@@ -24,13 +24,12 @@
   .upload__btn:hover,
   .upload__btn:focus,
   .upload__btn:active {
-    background: #11257c !important;
-    border: none !important;
+    background: #030098 !important;
   }
   .re__upload__btn {
     width: 100%;
     border-radius: 8px;
-    background: cadetblue;
+    background: #030098;
     padding: 8px;
     color: #fff;
     text-align: center;
@@ -61,4 +60,26 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%); /* 부모 요소 내 가운데 정렬 */
+}
+.input {
+  width: 300px;
+  border-radius: 30px;
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  transition: border-color 0.3s;
+}
+
+.input:focus {
+  border-color: #0e3487;
+  outline: none;
+}
+
+.label {
+  font-weight: 700;
+  margin-right: 10px;
+  font-size: 16px;
+  color: #333;
+  display: flex;
+  align-items: center;
 }

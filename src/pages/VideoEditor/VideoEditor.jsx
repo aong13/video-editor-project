@@ -15,7 +15,7 @@ import useDeviceType from "../../hooks/usdDeviceType";
 const ffmpeg = createFFmpeg({ log: true });
 
 const VideoEditor = () => {
-  const deice = useDeviceType();
+  const device = useDeviceType();
   const [ffmpegLoaded, setFFmpegLoaded] = useState(false);
   const [videoFile, setVideoFile] = useState();
   const [videoPlayerState, setVideoPlayerState] = useState();
@@ -23,6 +23,7 @@ const VideoEditor = () => {
   const [sliderValues, setSliderValues] = useState([0, 100]);
   const [processing, setProcessing] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const [customFileName, setCustomFileName] = useState("");
   const uploadFile = useRef("");
 
   useEffect(() => {
@@ -147,6 +148,25 @@ const VideoEditor = () => {
             />
           </section>
 
+          <section
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginBottom: 20,
+            }}
+          >
+            <div style={{ display: "flex" }}>
+              <label className={styles.label}>출력파일명</label>
+              <input
+                type="text"
+                placeholder="파일명"
+                value={customFileName}
+                onChange={(e) => setCustomFileName(e.target.value)}
+                className={styles.input}
+              />
+            </div>
+          </section>
+
           <section>
             <VideoConversionButton
               onConversionStart={() => {
@@ -160,6 +180,7 @@ const VideoEditor = () => {
               videoPlayerState={videoPlayerState}
               sliderValues={sliderValues}
               videoFile={videoFile}
+              customFileName={customFileName}
             />
           </section>
         </>
