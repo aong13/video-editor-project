@@ -21,7 +21,7 @@ const Header = () => {
             <Nav.Link as={Link} to="/merge-video">
               비디오 병합
             </Nav.Link>
-            <Nav.Link as={Link} to="/contact">
+            <Nav.Link as={Link} to="login">
               로그인
             </Nav.Link>
           </Nav>
