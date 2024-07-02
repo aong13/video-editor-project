@@ -1,3 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
+body {
+  font-family: 'Roboto', sans-serif; /* 선택한 폰트로 설정 */
+}
+
 .app__layout {
     display: flex;
     justify-content: center;
@@ -95,25 +100,6 @@
 
 ul {
     padding: 0 !important;
-}
-
-.gif__out__btn {
-    width: 100%;
-    padding: 16px 8px;
-    border-radius: 8px;
-    height: fit-content;
-    display: flex;
-    justify-content: center;
-    gap: 4px;
-    align-items: center;
-    background-color: #fff;
-}
-
-.gif__out__btn:hover,
-.gif__out__btn:focus,
-.gif__out__btn:active {
-    background: #fff !important;
-    border: none !important;
 }
 
 .video-react-big-play-button-center {
