@@ -1,8 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&family=Noto+Sans+KR:wght@100..900&display=swap');
 body {
-  font-family: 'Roboto', sans-serif; /* 선택한 폰트로 설정 */
+    font-family: "Noto Sans KR", sans-serif !important;
 }
-
 .app__layout {
     display: flex;
     justify-content: center;
