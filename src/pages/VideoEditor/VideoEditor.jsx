@@ -4,7 +4,7 @@ import { Button } from "react-bootstrap";
 import { createFFmpeg } from "@ffmpeg/ffmpeg";
 
 import video_placeholder from "../../assets/images/video_placeholder.svg";
-import VideoPlayer from "../VideoMerger/VideoPlayer";
+import VideoPlayer from "../VideoEditor/VideoPlayer";
 import MultiRangeSlider from "../../components/VideoEditor/MultiRangeSlider";
 import VideoConversionButton from "../../components/VideoEditor/VideoConversionButton";
 import { sliderValueToVideoTime } from "../../utils/utils";
