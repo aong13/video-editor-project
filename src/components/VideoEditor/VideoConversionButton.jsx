@@ -1,11 +1,10 @@
 import React from "react";
-import { Button } from "antd";
 import { fetchFile } from "@ffmpeg/ffmpeg";
 import { readFileAsBase64, sliderValueToVideoTime } from "../../utils/utils";
 import out from "../../assets/icons/out.svg";
 import dark_download from "../../assets/icons/dark_download.svg";
 import audio from "../../assets/icons/audio.svg";
-import styles from "./VideoConversionButton.module.css";
+import { ExportButton, ButtonContainer } from "../StyledButton";
 
 function VideoConversionButton({
   videoPlayerState,
@@ -130,33 +129,28 @@ function VideoConversionButton({
   };
 
   return (
-    <div className={styles.buttonContainer}>
-      <div className={styles.buttonItem}>
-        <Button onClick={convertToGif} className="gif__out__btn">
-          <img src={out} alt="GIF 내보내기" />
-          <p style={{ color: "#383838", fontSize: 16, fontWeight: 700 }}>
-            GIF 내보내기
-          </p>
-        </Button>
-      </div>
-      <div className={styles.buttonItem}>
-        <Button onClick={onCutTheVideo} className="gif__out__btn">
-          <img src={dark_download} alt="비디오 저장하기" />
-          <p style={{ color: "#383838", fontSize: 16, fontWeight: 700 }}>
-            비디오 저장하기
-          </p>
-        </Button>
-      </div>
-      <div className={styles.buttonItem}>
-        <Button onClick={convertToAudio} className="gif__out__btn">
-          <img src={audio} alt="오디오로 변환하기" />
-          <p style={{ color: "#383838", fontSize: 16, fontWeight: 700 }}>
-            오디오로 변환하기
-          </p>
-        </Button>
-      </div>
-    </div>
+    <ButtonContainer>
+      <ExportButton
+        onClick={convertToGif}
+        imgSrc={out}
+        imgAlt="GIF 내보내기"
+        buttonText="GIF 내보내기"
+      />
+
+      <ExportButton
+        onClick={onCutTheVideo}
+        imgSrc={dark_download}
+        imgAlt="비디오 저장하기"
+        buttonText="비디오 저장하기"
+      />
+
+      <ExportButton
+        onClick={convertToAudio}
+        imgSrc={audio}
+        imgAlt="오디오로 변환하기"
+        buttonText="오디오로 변환하기"
+      />
+    </ButtonContainer>
   );
 }
-
 export default VideoConversionButton;

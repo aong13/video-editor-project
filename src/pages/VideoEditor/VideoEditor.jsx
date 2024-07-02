@@ -77,7 +77,6 @@ const VideoEditor = () => {
               ref={uploadFile}
             />
             <Button
-              className={styles.re__upload__btn}
               onClick={() => uploadFile.current.click()}
               style={{ width: "fit-content" }}
             >

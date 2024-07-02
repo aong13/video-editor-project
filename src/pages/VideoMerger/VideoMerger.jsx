@@ -4,6 +4,7 @@ import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
 import MultiVideoPlayer from "./MultiVideoPlayer";
 import styles from "../VideoEditor.module.css";
 import ProcessingModal from "../../components/VideoEditor/ProcessingModal";
+import ExportButton from "../../components/StyledButton";
 
 const ffmpeg = createFFmpeg({ log: true });
 
@@ -105,14 +106,10 @@ function VideoMerger() {
               margin: "20px 0",
             }}
           >
-            <Button
-              variant="primary"
-              disabled={processing}
+            <ExportButton
               onClick={mergeVideos}
-              className={styles.upload__btn}
-            >
-              비디오 병합 및 다운로드
-            </Button>
+              buttonText="비디오 병합 및 다운로드"
+            />
           </div>
         </>
       )}
